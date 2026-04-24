@@ -7,10 +7,14 @@ pruebasNeodatis\PruebasNeodatis.class
 vista\VentanaLoggin$4.class
 vista\VentanaPrincipal$1.class
 persistencia\NeoDatisSGBD_CRUD.class
+backup\RespaldoPersistente$1.class
 modelo\Fabricante.class
 modelo\anotaciones\Tabla.class
+vista\VentanaPrincipal$2.class
+backup\RespaldoPersistente$2.class
 modelo\Material.class
 servicios\ServicioConsultasDAO.class
+backup\RespaldoPersistente.class
 vista\VentanaPrincipal.class
 modelo\Usuario.class
 modelo\anotaciones\ForeignKey.class
