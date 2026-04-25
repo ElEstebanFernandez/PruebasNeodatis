@@ -50,7 +50,71 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
     
     }
 
+    @Override
+    public boolean crear(T objeto) {
+        boolean creado = false;
 
+        ODB odb = abrirBD();
+
+        try {
+            odb.store(objeto);
+            creado = true;
+
+        } catch (Exception e) {
+            System.out.println("Error al crear el objeto: " + e.getMessage());
+        } finally {
+            odb.close();
+        }
+
+        return creado;
+    }
+
+    @Override
+    public boolean actualizar(T objetoAntiguo, T objetoNuevo) {
+        boolean actualizado = false;
+
+        ODB odb = abrirBD();
+
+        try {
+            // ELIMINA EL OBJETO ANTIGUO
+            odb.delete(objetoAntiguo);
+
+            // ALMACENA EL OBJETO NUEVO
+            odb.store(objetoNuevo);
+
+            actualizado = true;
+            odb.commit();
+
+        } catch (Exception e) {
+            odb.rollback();
+            System.out.println("Error al actualizar el objeto: " + e.getMessage());
+        } finally {
+            odb.close();
+        }
+
+        return actualizado;
+    }
+
+    @Override
+    public boolean eliminar(String id, Class<T> typo) {
+        boolean eliminado = false;
+
+        ODB odb = abrirBD();
+
+        try {
+            T objeto = buscarPorId(id, typo);
+            odb.delete(objeto);
+            eliminado = true;
+
+        } catch (Exception e) {
+            odb.rollback();
+            System.out.println("Error al eliminar el objeto: " + e.getMessage());
+        } finally {
+            odb.close();
+        }
+
+        return eliminado;
+    }
 
     @Override
     public ArrayList<T> listar(Class<T> tipo) {
@@ -82,7 +146,7 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
 
 
     @Override
-    public T buscarPorId(int id, Class<T> tipo) {
+    public T buscarPorId(String id, Class<T> tipo) {
 
         // ABRE LA BASE DE DATOS
         ODB odb = abrirBD();
