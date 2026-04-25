@@ -12,8 +12,7 @@ import modelo.Material;
 import modelo.Usuario;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
-import servicios.ServicioConsultasDAO;
-import servicios.ServicioConsultasNeodatisDAO;
+
 import vista.VentanaLoggin;
 
 /**
