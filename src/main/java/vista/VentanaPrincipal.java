@@ -4,11 +4,21 @@
  */
 package vista;
 
+import manager.ManagerMaterial;
+import modelo.Material;
+import utilidades.Generador;
+import utilidades.VALIDADOR;
+
+import javax.swing.*;
+
 /**
  *
  * @author Dell
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
+
+    private ManagerMaterial managerMaterial;
+    private Material materialCargado;
 
     /**
      * Creates new form VentanaPrincipal
@@ -16,6 +26,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     
     public VentanaPrincipal() {
+        managerMaterial = new ManagerMaterial();
+        materialCargado = null;
         initComponents();
     }
 
@@ -32,7 +44,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        campoIdMaterial = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         campoNombre = new javax.swing.JTextField();
@@ -59,7 +71,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         campoLote = new javax.swing.JTextField();
         jPanel20 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
-        campoFechaAlta = new javax.swing.JTextField();
+        campoFechaAlta = new javax.swing.JFormattedTextField();
         jLabel21 = new javax.swing.JLabel();
         jPanel21 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
@@ -114,9 +126,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Id Material");
 
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
-        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel23.setText("123456789");
+        campoIdMaterial.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        campoIdMaterial.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        campoIdMaterial.setText("Autogenerado");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -126,7 +138,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(campoIdMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -135,7 +147,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(campoIdMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -179,7 +191,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(spinnerPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spinnerPuntos, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel13Layout.setVerticalGroup(
@@ -363,8 +375,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel19.setText("Fecha Alta");
 
-        campoFechaAlta.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
-        campoFechaAlta.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        campoFechaAlta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
 
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("dd/mm/yyyy");
@@ -377,9 +388,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(campoFechaAlta, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                .addComponent(campoFechaAlta, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel20Layout.setVerticalGroup(
@@ -388,9 +399,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoFechaAlta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel21))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel21)
+                    .addComponent(campoFechaAlta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
@@ -399,7 +410,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         campiIdfabricante.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         campiIdfabricante.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        campiIdfabricante.setText("123456789");
+        campiIdfabricante.setText("FAB_12345678910");
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
@@ -409,7 +420,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(campiIdfabricante, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(campiIdfabricante)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel21Layout.setVerticalGroup(
@@ -806,18 +817,39 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jPanel7.setBackground(new java.awt.Color(0, 153, 153));
 
+        jScrollPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScrollPane1MouseClicked(evt);
+            }
+        });
+
         TablaResultados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Puntos", "Fecha de alta"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TablaResultados.setColumnSelectionAllowed(true);
+        TablaResultados.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(TablaResultados);
+        TablaResultados.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -883,7 +915,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -895,21 +927,112 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox6ActionPerformed
 
     private void botonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarActionPerformed
- 
+
+        if (botonGuardar.getText().equals("Guardar")) {
+            procesarAlmacenado();
+        } else {
+            procesarModificacion();
+        }
 
 
 
-
-      
     }//GEN-LAST:event_botonGuardarActionPerformed
 
+    private void procesarAlmacenado() {
+        String idMaterial = Generador.generarId(Material.class);
+        String nombre = campoNombre.getText();
+        int puntos = Integer.parseInt(spinnerPuntos.getValue().toString());
+        double volumen = Double.parseDouble(campoVolumen.getText());
+        int cantidad = Integer.parseInt(campoCantidad.getText());
+        String compuesto = campoCompuestos.getText();
+        String toxicidad = campoToxicidad.getText();
+        boolean estado = checkPromocion.isSelected();
+        String lote = campoLote.getText();
+        String fechaAlta = campoFechaAlta.getText();
+        String idFabricante = campiIdfabricante.getText();
+
+        boolean resultadoOperacion = managerMaterial.crearMaterial(idMaterial, nombre, puntos, volumen, cantidad, compuesto, toxicidad, estado, lote, fechaAlta, idFabricante);
+
+        if (resultadoOperacion) {
+            JOptionPane.showMessageDialog(this, "El material se ha guardado correctamente", "Material guardado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar el material", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void procesarModificacion() {
+        String idMaterial = campoIdMaterial.getText();
+        String nombre = campoNombre.getText();
+        int puntos = Integer.parseInt(spinnerPuntos.getValue().toString());
+        double volumen = Double.parseDouble(campoVolumen.getText());
+        int cantidad = Integer.parseInt(campoCantidad.getText());
+        String compuesto = campoCompuestos.getText();
+        String toxicidad = campoToxicidad.getText();
+        boolean estado = checkPromocion.isSelected();
+        String lote = campoLote.getText();
+        String fechaAlta = campoFechaAlta.getText();
+        String idFabricante = campiIdfabricante.getText();
+
+        boolean resultadoActualizacion = managerMaterial.actualizarMaterial(idMaterial, nombre, puntos, volumen, cantidad, compuesto, toxicidad, estado, lote, fechaAlta, idFabricante);
+
+        if (resultadoActualizacion) {
+            JOptionPane.showMessageDialog(this, "Se ha realizado la actualización con éxito", "Material actualizado", JOptionPane.INFORMATION_MESSAGE);
+            materialCargado = null;
+            limpiarCampos();
+            botonGuardar.setText("Guardar");
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar el material", "Error", JOptionPane.ERROR_MESSAGE);
+            materialCargado = null;
+            limpiarCampos();
+            botonGuardar.setText("Guardar");
+        }
+    }
+
     private void botonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBorrarActionPerformed
-        // TODO add your handling code here:
+        if (materialCargado == null ) {
+            JOptionPane.showMessageDialog(this, "No hay material que eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        String id = campoIdMaterial.getText();
+
+        if (managerMaterial.eliminarMaterial(id)) {
+            JOptionPane.showMessageDialog(this, "Material eliminado correctamente", "Material eliminado", JOptionPane.INFORMATION_MESSAGE);
+            materialCargado = null;
+            limpiarCampos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Ha ocurrido un error al eliminar el material", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_botonBorrarActionPerformed
+
+    private void limpiarCampos() {
+        campoNombre.setText("");
+        spinnerPuntos.setValue(0);
+        campoVolumen.setText("");
+        campoCantidad.setText("");
+        campoCompuestos.setText("");
+        campoToxicidad.setText("");
+        checkPromocion.setSelected(false);
+        campoLote.setText("");
+        campoFechaAlta.setText("");
+        campiIdfabricante.setText("");
+    }
 
     private void comboAscActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboAscActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboAscActionPerformed
+
+    private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
+        // TODO Se obtendría el material completo por el ID basandose en la tabla
+
+        // se añadiría como material cargado
+
+        if (materialCargado != null) {
+            botonGuardar.setText("Actualizar");
+        } else {
+            JOptionPane.showMessageDialog(this, "Ha ocurrido un error al obtener la información del material",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jScrollPane1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -953,7 +1076,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel campiIdfabricante;
     private javax.swing.JTextField campoCantidad;
     private javax.swing.JTextField campoCompuestos;
-    private javax.swing.JTextField campoFechaAlta;
+    private javax.swing.JFormattedTextField campoFechaAlta;
+    private javax.swing.JLabel campoIdMaterial;
     private javax.swing.JTextField campoLote;
     private javax.swing.JTextField campoNombre;
     private javax.swing.JTextField campoToxicidad;
@@ -980,7 +1104,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
