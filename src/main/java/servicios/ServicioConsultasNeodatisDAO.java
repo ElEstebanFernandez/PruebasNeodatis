@@ -50,34 +50,7 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
     
     }
 
-    @Override
-    public ArrayList<T> listar(Class<T> tipo) {
-
-        // ARRAYLIST DONDE SE GUARDAN LOS REGISTROS OBTENIDOS
-        ArrayList<T> lista = new ArrayList<>();
-
-        // ABRE LA BASE DE DATOS
-        ODB odb = abrirBD();
-
-        try {
-
-            // OBTIENE TODOS LOS OBJETOS DEL TIPO INDICADO
-            Objects<T> objects = odb.getObjects(tipo);
-
-            // RECORRE TODOS LOS RESULTADOS Y LOS AÑADE A LA LISTA
-            while (objects.hasNext()) {
-                lista.add(objects.next());
-            }
-
-        } finally {
-
-            // CIERRA SIEMPRE LA BD
-            odb.close();
-        }
-
-        return lista;
-    }
-
+  
 
     @Override
     public T buscarPorId(String id, Class<T> tipo) {
@@ -182,6 +155,26 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
         entrada.forEach(e -> carga.add(e));
 
         return carga;
+    }
+
+    @Override
+    public <T> ArrayList<T> listar(Class<T> tipo) {
+    ArrayList<T> lista = new ArrayList<>();
+
+    ODB odb = abrirBD();
+
+    try {
+        Objects<T> objects = odb.getObjects(tipo);
+
+        while (objects.hasNext()) {
+            lista.add(objects.next());
+        }
+
+    } finally {
+        odb.close();
+    }
+
+    return lista;
     }
 
 }

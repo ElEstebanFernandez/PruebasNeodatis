@@ -1,4 +1,5 @@
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\backup\RespaldoPersistente.java
+C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\manager\ManagerMaterial.java
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\modelo\anotaciones\ForeignKey.java
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\modelo\anotaciones\Id.java
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\modelo\anotaciones\Tabla.java
@@ -10,5 +11,7 @@ C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\persisten
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\pruebasNeodatis\PruebasNeodatis.java
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\servicios\ServicioConsultasDAO.java
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\servicios\ServicioConsultasNeodatisDAO.java
+C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\utilidades\Generador.java
+C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\utilidades\VALIDADOR.java
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\vista\VentanaLoggin.java
 C:\Users\Dell\Documents\NetBeansProjects\PruebasNeodatis\src\main\java\vista\VentanaPrincipal.java

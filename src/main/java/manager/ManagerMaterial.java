@@ -1,5 +1,8 @@
 package manager;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 import modelo.Material;
 import persistencia.NeoDatisSGBD_CRUD;
 import servicios.ServicioConsultasDAO;
@@ -11,10 +14,14 @@ public class ManagerMaterial {
 
     private final NeoDatisSGBD_CRUD<Material> crud;
     private final ServicioConsultasDAO<Material> consultas;
+    
+    private DefaultTableModel modelo;
 
     public ManagerMaterial(){
         crud = new NeoDatisSGBD_CRUD<>(Material.class);
         consultas = new ServicioConsultasNeodatisDAO<>(Material.class);
+        
+        modelo = new DefaultTableModel();
     }
 
     public boolean crearMaterial( String idMaterial, String nombre, int puntos, double volumen, int cantidad, String compuestos,
@@ -71,4 +78,43 @@ public class ManagerMaterial {
 
         return fueActualizado;
     }
+    
+    public <T> DefaultTableModel cargarTabla(Class<T> tipo) {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+
+    Field[] campos = tipo.getDeclaredFields();
+
+    // columnas
+    for (Field f : campos) {
+        modelo.addColumn(f.getName());
+    }
+
+    // datos
+    ArrayList<T> lista = consultas.listar(tipo);
+
+    for (T obj : lista) {
+
+        Object[] fila = new Object[campos.length];
+
+        for (int i = 0; i < campos.length; i++) {
+
+            campos[i].setAccessible(true);
+
+            try {
+                fila[i] = campos[i].get(obj);
+            } catch (Exception e) {
+                fila[i] = null;
+            }
+        }
+
+        modelo.addRow(fila);
+    }
+
+    return modelo;
+}
+  
+      public Material cargaMaterialVista(String id){
+          return consultas.buscarPorId(id, Material.class );
+      }
 }

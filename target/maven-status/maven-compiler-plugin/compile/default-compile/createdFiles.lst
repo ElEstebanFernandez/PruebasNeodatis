@@ -1,4 +1,6 @@
+vista\VentanaPrincipal$6.class
 vista\VentanaLoggin$3.class
+utilidades\Generador.class
 vista\VentanaLoggin$1.class
 vista\VentanaLoggin.class
 vista\VentanaPrincipal$1.class
@@ -10,6 +12,8 @@ backup\RespaldoPersistente$2.class
 vista\VentanaPrincipal$4.class
 modelo\Material.class
 servicios\ServicioConsultasDAO.class
+vista\VentanaPrincipal$7.class
+manager\ManagerMaterial.class
 vista\VentanaPrincipal.class
 servicios\ServicioConsultasNeodatisDAO.class
 modelo\anotaciones\Id.class
@@ -18,6 +22,8 @@ pruebasNeodatis\PruebasNeodatis.class
 vista\VentanaLoggin$4.class
 vista\VentanaPrincipal$5.class
 backup\RespaldoPersistente$1.class
+utilidades\VALIDADOR.class
+vista\VentanaPrincipal$8.class
 backup\RespaldoPersistente.class
 modelo\Usuario.class
 vista\VentanaPrincipal$3.class

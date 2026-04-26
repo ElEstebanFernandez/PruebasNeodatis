@@ -19,10 +19,15 @@ import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 public interface ServicioConsultasDAO<T> {
 
     ODB abrirBD();
-    ArrayList<T> listar(Class<T> typo);
-    T buscarPorId(String id,Class<T> typo);
-    ArrayList<T> buscarPorCriterio(ICriterion criterio,Class<T> typo);
+
+    <T> ArrayList<T> listar(Class<T> tipo);
+
+    T buscarPorId(String id, Class<T> typo);
+
+    ArrayList<T> buscarPorCriterio(ICriterion criterio, Class<T> typo);
+
     ArrayList<ObjectValues> buscarPorValue(ValuesCriteriaQuery valor);
+
     ArrayList<T> cargadorListas(Objects<T> entrada);
 
 }
