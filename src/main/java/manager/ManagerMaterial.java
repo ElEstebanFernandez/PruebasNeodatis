@@ -4,6 +4,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import modelo.Material;
+import org.neodatis.odb.ObjectValues;
+import org.neodatis.odb.Values;
+import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 import persistencia.NeoDatisSGBD_CRUD;
 import servicios.ServicioConsultasDAO;
 import servicios.ServicioConsultasNeodatisDAO;
@@ -117,4 +120,129 @@ public class ManagerMaterial {
       public Material cargaMaterialVista(String id){
           return consultas.buscarPorId(id, Material.class );
       }
+      
+public DefaultTableModel agregacionTabla(Class<?> clase, String campo, String funcion) {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+
+    // ALIAS PARA EL RESULTADO DE LA CONSULTA
+    String alias = "resultado";
+
+    Field field;
+
+    // OBTIENE EL CAMPO DE LA CLASE MEDIANTE REFLEXION
+    try {
+        field = clase.getDeclaredField(campo);
+    } catch (NoSuchFieldException e) {
+        modelo.addColumn("ERROR");
+        modelo.addRow(new Object[]{"CAMPO NO EXISTE EN LA CLASE"});
+        return modelo;
+    }
+
+    // OBTIENE EL TIPO DEL CAMPO Y VERIFICA SI ES NUMERICO
+    Class<?> tipo = field.getType();
+    boolean esNumerico = tipo == int.class || tipo == double.class ||
+                         tipo == float.class || tipo == long.class ||
+                         Number.class.isAssignableFrom(tipo);
+
+    ValuesCriteriaQuery query = new ValuesCriteriaQuery(clase);
+
+    // CONSTRUCCION DE LA CONSULTA SEGUN LA FUNCION
+    switch (funcion.toLowerCase()) {
+
+        case "count":
+            query.count(alias);
+            break;
+
+        case "sum":
+            if (!esNumerico) {
+                modelo.addColumn("ERROR");
+                modelo.addRow(new Object[]{"CAMPO NO PERMITIDO PARA SUM"});
+                return modelo;
+            }
+            query.sum(campo, alias);
+            break;
+
+        case "avg":
+            if (!esNumerico) {
+                modelo.addColumn("ERROR");
+                modelo.addRow(new Object[]{"CAMPO NO PERMITIDO PARA AVG"});
+                return modelo;
+            }
+            query.avg(campo, alias);
+            break;
+
+        case "min":
+            if (!esNumerico) {
+                modelo.addColumn("ERROR");
+                modelo.addRow(new Object[]{"CAMPO NO PERMITIDO PARA MIN"});
+                return modelo;
+            }
+            query.min(campo, alias);
+            break;
+
+        case "max":
+            if (!esNumerico) {
+                modelo.addColumn("ERROR");
+                modelo.addRow(new Object[]{"CAMPO NO PERMITIDO PARA MAX"});
+                return modelo;
+            }
+            query.max(campo, alias);
+            break;
+
+        default:
+            modelo.addColumn("ERROR");
+            modelo.addRow(new Object[]{"FUNCION NO SOPORTADA"});
+            return modelo;
+    }
+
+    // EJECUTA LA CONSULTA Y CAPTURA ERRORES ARITMETICOS
+    Values values;
+
+    try {
+        values = consultas.consultaAgregacion(query);
+    } catch (ArithmeticException m) {
+
+        modelo.addColumn("ERROR");
+        modelo.addRow(new Object[]{"ERROR EN AVG: OPERACION ARITMETICA NO VALIDA"});
+        return modelo;
+
+    } catch (Exception e) {
+
+        modelo.addColumn("ERROR");
+        modelo.addRow(new Object[]{"ERROR EN LA CONSULTA"});
+        return modelo;
+    }
+
+    // GENERA EL NOMBRE DE LA COLUMNA DE SALIDA
+    String nombreColumna;
+
+    if (funcion.equalsIgnoreCase("count")) {
+        nombreColumna = "COUNT(*)";
+    } else {
+        nombreColumna = funcion.toUpperCase() + "(" + field.getName() + ")";
+    }
+
+    modelo.addColumn(nombreColumna);
+
+    // OBTIENE Y AÑADE EL RESULTADO A LA TABLA
+    if (values.hasNext()) {
+        ObjectValues ov = (ObjectValues) values.next();
+        Object resultado = ov.getByAlias(alias);
+        modelo.addRow(new Object[]{resultado});
+    }
+
+    return modelo;
+}
+      //CONFIGURA LOS CAMPOS DE LA TABLA
+      public static String[] obtenerCampos(Class<?> clase) {
+    Field[] fields = clase.getDeclaredFields();
+    String[] nombres = new String[fields.length];
+
+    for (int i = 0; i < fields.length; i++) {
+        nombres[i] = fields[i].getName();
+    }
+
+    return nombres;
+}
 }

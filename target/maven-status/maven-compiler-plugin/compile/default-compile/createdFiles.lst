@@ -7,9 +7,11 @@ vista\VentanaPrincipal$1.class
 persistencia\NeoDatisSGBD_CRUD.class
 modelo\Fabricante.class
 modelo\anotaciones\Tabla.class
+vista\VentanaPrincipal$9.class
 vista\VentanaPrincipal$2.class
 backup\RespaldoPersistente$2.class
 vista\VentanaPrincipal$4.class
+vista\VentanaPrincipal$10.class
 modelo\Material.class
 servicios\ServicioConsultasDAO.class
 vista\VentanaPrincipal$7.class
@@ -21,6 +23,7 @@ persistencia\SGBD_SERVICIO_CRUD.class
 pruebasNeodatis\PruebasNeodatis.class
 vista\VentanaLoggin$4.class
 vista\VentanaPrincipal$5.class
+vista\VentanaPrincipal$11.class
 backup\RespaldoPersistente$1.class
 utilidades\VALIDADOR.class
 vista\VentanaPrincipal$8.class

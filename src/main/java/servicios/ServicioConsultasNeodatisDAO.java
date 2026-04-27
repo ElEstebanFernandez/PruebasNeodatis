@@ -177,4 +177,14 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
     return lista;
     }
 
+  @Override
+public Values consultaAgregacion(ValuesCriteriaQuery query) {
+    ODB odb = abrirBD();
+    try {
+        return odb.getValues(query);
+    } finally {
+        odb.close();
+    }
+}
+
 }

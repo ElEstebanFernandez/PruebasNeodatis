@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ObjectValues;
 import org.neodatis.odb.Objects;
+import org.neodatis.odb.Values;
 import org.neodatis.odb.core.query.criteria.ICriterion;
 import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 
@@ -29,5 +30,7 @@ public interface ServicioConsultasDAO<T> {
     ArrayList<ObjectValues> buscarPorValue(ValuesCriteriaQuery valor);
 
     ArrayList<T> cargadorListas(Objects<T> entrada);
+    
+    Values consultaAgregacion(ValuesCriteriaQuery query);
 
 }
