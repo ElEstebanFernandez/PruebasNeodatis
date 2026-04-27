@@ -187,4 +187,20 @@ public Values consultaAgregacion(ValuesCriteriaQuery query) {
     }
 }
 
+    @Override
+    public Objects listarOrdenado(CriteriaQuery query) {
+        ODB odb = abrirBD();
+
+    Objects resultado = null;
+
+    try {
+        resultado = odb.getObjects(query);
+
+    } finally {
+        odb.close();
+    }
+
+    return resultado;
+    }
+
 }

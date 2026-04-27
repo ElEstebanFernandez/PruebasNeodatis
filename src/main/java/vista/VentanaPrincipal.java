@@ -34,7 +34,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private String[] campos = {"id", "nombre", "puntos", "volumen", "cantidad","compuestos", "toxicidad", "enPromocion","lote", "fechaAlta", "idFabricante"};
     //FUNCIONES COMBOBOX
     private String[] funciones = {"count","sum","avg","min","max"};
-    private String campoSeleccionado,funcionSeleccionada;
+    private String campoSeleccionadoAgregacion,funcionSeleccionadaAgregacion;
+    
+    private String[] comboOrden ={"asc","desc"};
+    private String campoSeleccionadoOrden,funcionSeleccionadaOrden;
+
+    
     
     public VentanaPrincipal() {
         managerMaterial = new ManagerMaterial();
@@ -49,7 +54,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
          initCombosAgregacion();
          eventoCombosAgregacion();
     
-
+         //INICIALIZA COMBOS ORDENAR
+         initCombosOrdenar();
+         eventoCombosOrdenar();
     }
 
     /**
@@ -122,6 +129,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanel23 = new javax.swing.JPanel();
         jComboBox7 = new javax.swing.JComboBox<>();
         jLabel23 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        ordenComboBox = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        comboCamposOrden = new javax.swing.JComboBox<>();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaResultados = new javax.swing.JTable();
@@ -555,7 +566,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(0, 153, 153));
 
-        funcionesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ascendente", "Descendente" }));
         funcionesComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 funcionesComboBoxActionPerformed(evt);
@@ -713,6 +723,46 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addGap(8, 8, 8))
         );
 
+        ordenComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ordenComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        jLabel5.setText("Ordenar ");
+
+        comboCamposOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Campo" }));
+        comboCamposOrden.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCamposOrdenActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(comboCamposOrden, 0, 92, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ordenComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ordenComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(comboCamposOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -727,7 +777,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
                     .addComponent(jPanel22, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
                     .addComponent(jPanel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -737,6 +788,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -944,7 +997,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Material eliminado correctamente", "Material eliminado", JOptionPane.INFORMATION_MESSAGE);
             materialCargado = null;
             limpiarCampos();
-            actualizarTabla();
+            actualizarTablaAgregacion();
         } else {
             JOptionPane.showMessageDialog(this, "Ha ocurrido un error al eliminar el material", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -988,6 +1041,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void botonRecargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRecargarActionPerformed
       initTabla();
     }//GEN-LAST:event_botonRecargarActionPerformed
+
+    private void ordenComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordenComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ordenComboBoxActionPerformed
+
+    private void comboCamposOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCamposOrdenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboCamposOrdenActionPerformed
 
      public void initTabla() {
     tabla = (JTable) jScrollPane1.getViewport().getView();
@@ -1083,24 +1144,24 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     comboCamposAgregacion.setModel(new DefaultComboBoxModel<>(campos));
     funcionesComboBox.setModel(new DefaultComboBoxModel<>(funciones));
     }
-    //EVENTO COMBOS
+    //EVENTO COMBOS AGREGACION
     public void eventoCombosAgregacion(){
     comboCamposAgregacion.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            actualizarTabla();
+            actualizarTablaAgregacion();
         }
     });
 
     funcionesComboBox.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            actualizarTabla();
+            actualizarTablaAgregacion();
         }
     });
     }
-    //FUNCIONES AGREGACION COMBOBOX
-    private void actualizarTabla() {
+    //FUNCIONES AGREGACION  COMBOBOX
+    private void actualizarTablaAgregacion() {
         
      if (comboCamposAgregacion.getSelectedItem() == null ||
         funcionesComboBox.getSelectedItem() == null) {
@@ -1115,7 +1176,41 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     tabla.setModel(modelo);
 }
     
-    
+    //FUNCION ORDENAR
+    public void initCombosOrdenar(){
+        comboCamposOrden.setModel(new DefaultComboBoxModel<>(campos));
+        ordenComboBox.setModel(new DefaultComboBoxModel<>(comboOrden));
+    }
+    //EVENTOS COMBOS ORDENAR
+     public void eventoCombosOrdenar(){
+    comboCamposOrden.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            actualizarTablaOrden();
+        }
+    });
+
+    ordenComboBox.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+                 actualizarTablaOrden();
+        }
+    });
+    }
+    private void actualizarTablaOrden() {
+        
+     if (comboCamposOrden.getSelectedItem() == null ||
+        ordenComboBox.getSelectedItem() == null) {
+        return;
+    }
+//CAPTURA SELECION DE LOS COMBO
+    String campo = comboCamposOrden.getSelectedItem().toString();
+    String funcion = ordenComboBox.getSelectedItem().toString();
+//ENVIA A MANAGER CAMPO Y FUNCION SELECCIONADOS
+    DefaultTableModel modelo = managerMaterial.orderByTabla(Material.class, campo, funcion);
+
+    tabla.setModel(modelo);
+}
     
     
     
@@ -1170,6 +1265,7 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JTextField campoVolumen;
     private javax.swing.JCheckBox checkPromocion;
     private javax.swing.JComboBox<String> comboCamposAgregacion;
+    private javax.swing.JComboBox<String> comboCamposOrden;
     private javax.swing.JComboBox<String> funcionesComboBox;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox5;
@@ -1194,9 +1290,11 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
@@ -1220,6 +1318,7 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton limpiarCampos;
+    private javax.swing.JComboBox<String> ordenComboBox;
     private javax.swing.JSpinner spinnerPuntos;
     // End of variables declaration//GEN-END:variables
 }

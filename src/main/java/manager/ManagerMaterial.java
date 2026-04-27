@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import modelo.Material;
 import org.neodatis.odb.ObjectValues;
+import org.neodatis.odb.Objects;
 import org.neodatis.odb.Values;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 import persistencia.NeoDatisSGBD_CRUD;
 import servicios.ServicioConsultasDAO;
@@ -82,30 +84,31 @@ public class ManagerMaterial {
         return fueActualizado;
     }
     
-    public <T> DefaultTableModel cargarTabla(Class<T> tipo) {
+  public <T> DefaultTableModel cargarTabla(Class<T> tipo) {
 
     DefaultTableModel modelo = new DefaultTableModel();
 
-    Field[] campos = tipo.getDeclaredFields();
+    // OBTIENE CABECERAS REUTILIZANDO METODO
+    String[] cabeceras = obtenerCabeceras(tipo);
 
-    // columnas
-    for (Field f : campos) {
-        modelo.addColumn(f.getName());
+    // AÑADE COLUMNAS
+    for (String c : cabeceras) {
+        modelo.addColumn(c);
     }
 
-    // datos
+    // OBTIENE DATOS DESDE BASE DE DATOS
     ArrayList<T> lista = consultas.listar(tipo);
 
     for (T obj : lista) {
 
-        Object[] fila = new Object[campos.length];
+        Object[] fila = new Object[cabeceras.length];
 
-        for (int i = 0; i < campos.length; i++) {
-
-            campos[i].setAccessible(true);
+        for (int i = 0; i < cabeceras.length; i++) {
 
             try {
-                fila[i] = campos[i].get(obj);
+                Field campo = tipo.getDeclaredField(cabeceras[i]);
+                campo.setAccessible(true);
+                fila[i] = campo.get(obj);
             } catch (Exception e) {
                 fila[i] = null;
             }
@@ -234,15 +237,92 @@ public DefaultTableModel agregacionTabla(Class<?> clase, String campo, String fu
 
     return modelo;
 }
-      //CONFIGURA LOS CAMPOS DE LA TABLA
-      public static String[] obtenerCampos(Class<?> clase) {
-    Field[] fields = clase.getDeclaredFields();
-    String[] nombres = new String[fields.length];
 
-    for (int i = 0; i < fields.length; i++) {
-        nombres[i] = fields[i].getName();
+public DefaultTableModel orderByTabla(Class<?> clase, String campo, String orden) {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+
+    // CREA CONSULTA DE TIPO OBJETOS (NO AGREGACION)
+    CriteriaQuery query = new CriteriaQuery(clase);
+
+    // DEFINE EL TIPO DE ORDENACION SEGUN EL VALOR DEL COMBO
+    switch (orden.toLowerCase()) {
+
+        case "asc":
+            query.orderByAsc(campo);
+            break;
+
+        case "desc":
+            query.orderByDesc(campo);
+            break;
+
+        default:
+            // SI EL ORDEN NO ES VALIDO SE DEVUELVE TABLA CON ERROR
+            modelo.addColumn("ERROR");
+            modelo.addRow(new Object[]{"ORDEN NO SOPORTADO"});
+            return modelo;
     }
 
-    return nombres;
+    Objects objects;
+
+    try {
+        // EJECUTA LA CONSULTA ORDENADA EN BASE DE DATOS
+        objects = consultas.listarOrdenado(query);
+
+    } catch (Exception e) {
+
+        // SI FALLA LA CONSULTA SE DEVUELVE ERROR EN TABLA
+        modelo.addColumn("ERROR");
+        modelo.addRow(new Object[]{"ERROR EN LA CONSULTA"});
+        return modelo;
+    }
+
+    // OBTIENE LOS NOMBRES DE LOS CAMPOS DE LA CLASE PARA LAS CABECERAS
+    String[] cabeceras = obtenerCabeceras(clase);
+
+    // AÑADE LAS CABECERAS A LA TABLA
+    for (String c : cabeceras) {
+        modelo.addColumn(c);
+    }
+
+    // RECORRE LOS OBJETOS OBTENIDOS DE LA CONSULTA
+    while (objects.hasNext()) {
+
+        Object obj = objects.next();
+
+        // CREA FILA CON EL MISMO TAMAÑO QUE LAS CABECERAS
+        Object[] fila = new Object[cabeceras.length];
+
+        for (int i = 0; i < cabeceras.length; i++) {
+
+            try {
+                // OBTIENE EL VALOR DEL CAMPO MEDIANTE REFLEXION
+                Field f = clase.getDeclaredField(cabeceras[i]);
+                f.setAccessible(true);
+                fila[i] = f.get(obj);
+
+            } catch (Exception e) {
+                // SI FALLA EL ACCESO SE ASIGNA NULL
+                fila[i] = null;
+            }
+        }
+
+        // AÑADE LA FILA AL MODELO
+        modelo.addRow(fila);
+    }
+
+    // DEVUELVE EL MODELO LISTO PARA LA TABLA
+    return modelo;
+}
+    public static String[] obtenerCabeceras(Class<?> clase) {
+
+    Field[] fields = clase.getDeclaredFields();
+    String[] cabeceras = new String[fields.length];
+
+    for (int i = 0; i < fields.length; i++) {
+        cabeceras[i] = fields[i].getName();
+    }
+
+    return cabeceras;
 }
 }
