@@ -4,8 +4,11 @@
  */
 package vista;
 
+import backup.RespaldoPersistente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import manager.ManagerMaterial;
 import modelo.Material;
 import utilidades.Generador;
@@ -23,28 +26,33 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private ManagerMaterial managerMaterial;
     private Material materialCargado;
 
-    /**
-     * Creates new form VentanaPrincipal
-     */
+    private RespaldoPersistente respaldo;
+    
     private JTable tabla;
     private int fila,columna;
     private Object idSeleccionado;
     
     //CAMPOS COMBOBOX        
     private String[] campos = {"id", "nombre", "puntos", "volumen", "cantidad","compuestos", "toxicidad", "enPromocion","lote", "fechaAlta", "idFabricante"};
-    //FUNCIONES COMBOBOX
+    //FUNCIONES COMBOBOX AGREGACION
     private String[] funciones = {"count","sum","avg","min","max"};
     private String campoSeleccionadoAgregacion,funcionSeleccionadaAgregacion;
-    
+    //FUNCIONES COMBOBOX ORDEN
     private String[] comboOrden ={"asc","desc"};
     private String campoSeleccionadoOrden,funcionSeleccionadaOrden;
-
-    
+    //FUNCIONES COMBOBOX ICRITERION
+    private String[] operadores = {"Igual a","Mayor que","Menor que","Mayor o igual","Menor o igual","Contiene"};
+    private String campoIcriterion;
     
     public VentanaPrincipal() {
         managerMaterial = new ManagerMaterial();
         materialCargado = null;
         initComponents();
+        
+        // CLASE PARA BACKUPS
+        respaldo = new RespaldoPersistente();
+        // EVENTOS COMBO BACKUP
+        eventoCombosBackup();
         
         //INICIALIZACION TABLA
          initTabla();
@@ -57,6 +65,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
          //INICIALIZA COMBOS ORDENAR
          initCombosOrdenar();
          eventoCombosOrdenar();
+         
+         //INICIALIZA FILTRO AVANZADO
+         initCombosIcriterion();
+         eventoCombosIcriterion();
+         
     }
 
     /**
@@ -108,6 +121,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         botonGuardar = new javax.swing.JButton();
         botonBorrar = new javax.swing.JButton();
+        comboBackup = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -118,17 +132,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel9 = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        comboOperadorICriterion = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
-        jComboBox5 = new javax.swing.JComboBox<>();
+        comboCamposICriterion = new javax.swing.JComboBox<>();
+        campoBuscadorIcriterion = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jPanel22 = new javax.swing.JPanel();
-        jComboBox6 = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        jPanel23 = new javax.swing.JPanel();
-        jComboBox7 = new javax.swing.JComboBox<>();
-        jLabel23 = new javax.swing.JLabel();
+        botonICriterion = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         ordenComboBox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
@@ -147,7 +156,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(0, 153, 153));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Registro Materiales");
+        jLabel1.setText("Registro Materiales ");
         jLabel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 102), 3, true));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
@@ -508,6 +517,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        comboBackup.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Exportar BD", "Importar BD" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -526,15 +537,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBackup, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(comboBackup)
+                        .addGap(1, 1, 1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -613,20 +631,48 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jPanel9.setPreferredSize(new java.awt.Dimension(0, 40));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel9.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jLabel9.setText("Filtrar : ");
+
+        comboCamposICriterion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Campo" }));
+        comboCamposICriterion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCamposICriterionActionPerformed(evt);
+            }
+        });
+
+        campoBuscadorIcriterion.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+        campoBuscadorIcriterion.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        jLabel10.setText("Criterio :");
+
+        botonICriterion.setText("Ir");
+        botonICriterion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonICriterionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+            .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(comboCamposICriterion, 0, 92, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboOperadorICriterion, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(campoBuscadorIcriterion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(botonICriterion, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -634,93 +680,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                 .addGap(8, 8, 8)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox2)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(8, 8, 8))
-        );
-
-        jPanel12.setPreferredSize(new java.awt.Dimension(0, 40));
-
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel10.setText("Filtrar : ");
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox5)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(8, 8, 8))
-        );
-
-        jPanel22.setPreferredSize(new java.awt.Dimension(0, 40));
-
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel11.setText("Filtrar : ");
-
-        javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
-        jPanel22.setLayout(jPanel22Layout);
-        jPanel22Layout.setHorizontalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel22Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel22Layout.setVerticalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel22Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox6)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(8, 8, 8))
-        );
-
-        jPanel23.setPreferredSize(new java.awt.Dimension(0, 40));
-
-        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-        jLabel23.setText("Filtrar : ");
-
-        javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
-        jPanel23.setLayout(jPanel23Layout);
-        jPanel23Layout.setHorizontalGroup(
-            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel23Layout.setVerticalGroup(
-            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox7)
-                    .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(8, 8, 8))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(48, 48, 48))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(comboOperadorICriterion)
+                            .addComponent(comboCamposICriterion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(campoBuscadorIcriterion)
+                            .addComponent(botonICriterion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(39, 39, 39))))
         );
 
         ordenComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -774,9 +747,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                    .addComponent(jPanel22, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                    .addComponent(jPanel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
                     .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -795,13 +765,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -997,7 +961,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Material eliminado correctamente", "Material eliminado", JOptionPane.INFORMATION_MESSAGE);
             materialCargado = null;
             limpiarCampos();
-            actualizarTablaAgregacion();
+            cargatablaGeneral();
         } else {
             JOptionPane.showMessageDialog(this, "Ha ocurrido un error al eliminar el material", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1050,9 +1014,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboCamposOrdenActionPerformed
 
-     public void initTabla() {
-    tabla = (JTable) jScrollPane1.getViewport().getView();
+    private void comboCamposICriterionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCamposICriterionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboCamposICriterionActionPerformed
+
+    private void botonICriterionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonICriterionActionPerformed
+   comboCamposICriterion.setSelectedIndex(0);
+   comboOperadorICriterion.setSelectedIndex(0);
+   campoBuscadorIcriterion.setText("");
+   cargatablaGeneral();
+    }//GEN-LAST:event_botonICriterionActionPerformed
+
+    public void cargatablaGeneral(){
+      tabla = (JTable) jScrollPane1.getViewport().getView();
     tabla.setModel(managerMaterial.cargarTabla(Material.class));
+  }
+    public void initTabla() {
+    
+        cargatablaGeneral();
 
     fila = columna = -1;
     
@@ -1177,11 +1156,12 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
 }
     
     //FUNCION ORDENAR
-    public void initCombosOrdenar(){
+     public void initCombosOrdenar(){
         comboCamposOrden.setModel(new DefaultComboBoxModel<>(campos));
         ordenComboBox.setModel(new DefaultComboBoxModel<>(comboOrden));
     }
-    //EVENTOS COMBOS ORDENAR
+   
+     //EVENTOS COMBOS ORDENAR
      public void eventoCombosOrdenar(){
     comboCamposOrden.addActionListener(new ActionListener() {
         @Override
@@ -1197,7 +1177,7 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
         }
     });
     }
-    private void actualizarTablaOrden() {
+     private void actualizarTablaOrden() {
         
      if (comboCamposOrden.getSelectedItem() == null ||
         ordenComboBox.getSelectedItem() == null) {
@@ -1211,9 +1191,76 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
 
     tabla.setModel(modelo);
 }
+     public void eventoCombosBackup(){
+    comboBackup.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          if(comboBackup.getSelectedIndex()==0){
+              respaldo.hacerRespaldo();
+          }else{
+              respaldo.restaurarRespaldoSeguro();
+          }
+        }
+    });
+
+    }
     
     
+     //INICIALIZA COMBOS ICRITERION
+     public void initCombosIcriterion(){
+         comboCamposICriterion.setModel(new DefaultComboBoxModel<>(campos));
+         comboOperadorICriterion.setModel(new DefaultComboBoxModel<>(operadores));
+     }
+     //EVENTO COMBO FILTROS CON ICRITERION
+         public void eventoCombosIcriterion(){
+             
+      // EVENTO CAMBIO DE CAMPO
+    comboCamposICriterion.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            actualizarTablaIcriterion();
+        }
+    });
+
+    // EVENTO CAMBIO DE OPERADOR
+    comboOperadorICriterion.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            actualizarTablaIcriterion();
+        }
+    });
+
+    // EVENTO DE ESCRITURA DISPARA AL LEVANTAR LA TECLA
+    campoBuscadorIcriterion.addKeyListener(new KeyAdapter() {
+        @Override
+        public void keyReleased(KeyEvent e) {
+            if(campoBuscadorIcriterion.getText().isEmpty())
+            cargatablaGeneral();
+            else
+            actualizarTablaIcriterion();
+
+        }
+    });
     
+    }
+   //LLAMA A MANAGER Y LE PASA LOS 3 VALORES PARA FILTRAR ICRITERION CAMPO , ATRIBUTO , VALOR
+         private void actualizarTablaIcriterion() {
+
+    if (comboCamposICriterion.getSelectedItem() == null ||
+        comboOperadorICriterion.getSelectedItem() == null) {
+        return;
+    }
+
+    String campo = comboCamposICriterion.getSelectedItem().toString();
+    String operador = comboOperadorICriterion.getSelectedItem().toString();
+    String valor = campoBuscadorIcriterion.getText();
+
+    DefaultTableModel modelo =
+            managerMaterial.filtrarIcriterion(Material.class, campo, operador, valor);
+
+    tabla.setModel(modelo);
+}
+     
     /**
      * @param args the command line arguments
      */
@@ -1253,8 +1300,10 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JTable TablaResultados;
     private javax.swing.JButton botonBorrar;
     private javax.swing.JButton botonGuardar;
+    private javax.swing.JButton botonICriterion;
     private javax.swing.JButton botonRecargar;
     private javax.swing.JLabel campiIdfabricante;
+    private javax.swing.JTextField campoBuscadorIcriterion;
     private javax.swing.JTextField campoCantidad;
     private javax.swing.JTextField campoCompuestos;
     private javax.swing.JFormattedTextField campoFechaAlta;
@@ -1264,16 +1313,14 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JTextField campoToxicidad;
     private javax.swing.JTextField campoVolumen;
     private javax.swing.JCheckBox checkPromocion;
+    private javax.swing.JComboBox<String> comboBackup;
     private javax.swing.JComboBox<String> comboCamposAgregacion;
+    private javax.swing.JComboBox<String> comboCamposICriterion;
     private javax.swing.JComboBox<String> comboCamposOrden;
+    private javax.swing.JComboBox<String> comboOperadorICriterion;
     private javax.swing.JComboBox<String> funcionesComboBox;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JComboBox<String> jComboBox7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -1286,7 +1333,6 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1295,7 +1341,6 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
@@ -1306,8 +1351,6 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
-    private javax.swing.JPanel jPanel22;
-    private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;

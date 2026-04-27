@@ -7,6 +7,8 @@ import modelo.Material;
 import org.neodatis.odb.ObjectValues;
 import org.neodatis.odb.Objects;
 import org.neodatis.odb.Values;
+import org.neodatis.odb.core.query.criteria.ICriterion;
+import org.neodatis.odb.core.query.criteria.Where;
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 import persistencia.NeoDatisSGBD_CRUD;
@@ -325,4 +327,115 @@ public DefaultTableModel orderByTabla(Class<?> clase, String campo, String orden
 
     return cabeceras;
 }
+
+ public DefaultTableModel filtrarIcriterion(Class<Material> clase, String campo, String operador, String valor) {
+
+    DefaultTableModel modelo = new DefaultTableModel();
+
+    try {
+
+        // CONVERSION DIRECTA A COMPARABLE
+        Comparable valorConvertido = convertirValor(clase, campo, valor);
+
+        ICriterion criterio;
+
+        switch (operador.toLowerCase()) {
+
+            case "igual a":
+                criterio = Where.equal(campo, valorConvertido);
+                break;
+
+            case "mayor que":
+                criterio = Where.gt(campo, valorConvertido);
+                break;
+
+            case "menor que":
+                criterio = Where.lt(campo, valorConvertido);
+                break;
+
+            case "mayor o igual":
+                criterio = Where.ge(campo, valorConvertido);
+                break;
+
+            case "menor o igual":
+                criterio = Where.le(campo, valorConvertido);
+                break;
+
+            case "contiene":
+                criterio = Where.like(campo, "%" + valor + "%");
+                break;
+
+            default:
+                modelo.addColumn("ERROR");
+                modelo.addRow(new Object[]{"OPERADOR NO SOPORTADO"});
+                return modelo;
+        }
+
+        CriteriaQuery query = new CriteriaQuery(clase, criterio);
+        Objects objects = consultas.listarOrdenado(query);
+
+        String[] cabeceras = obtenerCabeceras(clase);
+
+        for (String c : cabeceras) {
+            modelo.addColumn(c);
+        }
+
+        while (objects.hasNext()) {
+
+            Object obj = objects.next();
+            Object[] fila = new Object[cabeceras.length];
+
+            for (int i = 0; i < cabeceras.length; i++) {
+
+                try {
+                    Field f = clase.getDeclaredField(cabeceras[i]);
+                    f.setAccessible(true);
+                    fila[i] = f.get(obj);
+                } catch (Exception e) {
+                    fila[i] = null;
+                }
+            }
+
+            modelo.addRow(fila);
+        }
+
+    } catch (Exception e) {
+
+        modelo.addColumn("ERROR");
+        modelo.addRow(new Object[]{"ERROR EN EL FILTRO"});
+    }
+
+    return modelo;
+}
+  
+  private Comparable convertirValor(Class<?> clase, String campo, String valor) {
+     // OJO COMPARABLE 
+    try {
+        Field f = clase.getDeclaredField(campo);
+        Class<?> tipo = f.getType();
+
+        if (tipo == int.class || tipo == Integer.class)
+            return Integer.parseInt(valor);
+
+        if (tipo == double.class || tipo == Double.class)
+            return Double.parseDouble(valor);
+
+        if (tipo == float.class || tipo == Float.class)
+            return Float.parseFloat(valor);
+
+        if (tipo == long.class || tipo == Long.class)
+            return Long.parseLong(valor);
+
+        if (tipo == String.class)
+            return valor;
+
+        // BOOLEAN NO ES COMPARABLE O SI?
+        return null;
+
+    } catch (Exception e) {
+        return null;
+    }
+}
+    
+    
 }

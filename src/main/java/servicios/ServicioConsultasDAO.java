@@ -5,6 +5,8 @@
 package servicios;
 
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import modelo.Material;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ObjectValues;
 import org.neodatis.odb.Objects;
@@ -34,6 +36,7 @@ public interface ServicioConsultasDAO<T> {
     
     Values consultaAgregacion(ValuesCriteriaQuery query);
 
-    public Objects listarOrdenado(CriteriaQuery query);
+    Objects listarOrdenado(CriteriaQuery query);
+    
 
 }
