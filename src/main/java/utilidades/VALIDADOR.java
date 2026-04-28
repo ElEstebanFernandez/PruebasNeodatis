@@ -13,7 +13,7 @@ public enum VALIDADOR {
      */
     ID_MATERIAL("^MAT_\\d{11}$"),
     ID_FABRICANTE("FAB_\\d{11}$"),
-    NOMBRE("^[a-zA-Z0-9 ]{3,50}$"),
+    NOMBRE("^[a-zA-Z0-9_ ]{3,50}$"),
     PUNTOS("^[1-9]\\d*$"),
     VOLUMEN("^[1-9]\\d*(\\.\\d+)?$"),
     CANTIDAD("^[1-9]\\d*$"),

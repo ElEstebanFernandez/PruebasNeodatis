@@ -437,8 +437,10 @@ public class ManagerMaterial {
 
             if (tipo == String.class)
                 return valor;
-
-            // BOOLEAN NO SE USA EN COMPARACIONES
+            
+          if (tipo == boolean.class || tipo == Boolean.class)
+                return Boolean.parseBoolean(valor);
+            
             return null;
 
         } catch (Exception e) {
