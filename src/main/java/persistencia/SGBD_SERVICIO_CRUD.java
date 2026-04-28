@@ -12,7 +12,7 @@ public interface SGBD_SERVICIO_CRUD<T>{
 
     boolean insert(T obj);
 
-    boolean update(T obj);
+    boolean update(String id, T objNuevo);
 
     boolean delete(String campo, Object valor, Class<T> type);
 

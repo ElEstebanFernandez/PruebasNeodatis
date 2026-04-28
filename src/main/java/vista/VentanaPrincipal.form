@@ -95,7 +95,6 @@
                           <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
@@ -119,7 +118,7 @@
                   <Component id="jPanel21" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="18" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -325,7 +324,7 @@
                   <Font name="Segoe UI" size="14" style="2"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Volumen"/>
+                <Property name="text" type="java.lang.String" value="Volumen cc"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="campoVolumen">
@@ -428,6 +427,7 @@
                   <Font name="Segoe UI" size="14" style="2"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="toolTipText" type="java.lang.String" value="PLASTICO, VIDRIO, PAPEL, METAL, ALUMINIO u OTRO"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -475,6 +475,7 @@
                   <Font name="Segoe UI" size="14" style="2"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="toolTipText" type="java.lang.String" value="LETAL, ALTA, MEDIA, BAJA o NINGUNA"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -733,6 +734,9 @@
               </StringArray>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBackupActionPerformed"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
@@ -1030,7 +1034,8 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="botonICriterion">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Ir"/>
+                    <Property name="text" type="java.lang.String" value="X"/>
+                    <Property name="actionCommand" type="java.lang.String" value=""/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonICriterionActionPerformed"/>

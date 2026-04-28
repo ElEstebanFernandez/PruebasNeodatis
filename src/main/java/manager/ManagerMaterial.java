@@ -70,7 +70,7 @@ public class ManagerMaterial {
     }
 
     // ACTUALIZA MATERIAL EXISTENTE
-    public boolean actualizarMaterial(String idMaterial, String nombre, int puntos, double volumen,
+    public <T> boolean  actualizarMaterial(T materialAtiguo, String idMaterial, String nombre, int puntos, double volumen,
                                       int cantidad, String compuestos, String toxicidad,
                                       boolean enPromocion, String lote, String fechaAlta,
                                       String idFabricante) {
@@ -95,7 +95,7 @@ public class ManagerMaterial {
                                         compuestos, toxicidad, enPromocion, lote, fechaAlta, idFabricante);
 
         // UPDATE EN BASE DE DATOS
-        fueActualizado = crud.update(material);
+        fueActualizado = crud.update(material.getId(), material);
 
         return fueActualizado;
     }

@@ -253,7 +253,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Volumen");
+        jLabel13.setText("Volumen cc");
 
         campoVolumen.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         campoVolumen.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -313,6 +313,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         campoCompuestos.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         campoCompuestos.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        campoCompuestos.setToolTipText("PLASTICO, VIDRIO, PAPEL, METAL, ALUMINIO u OTRO");
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -341,6 +342,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         campoToxicidad.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         campoToxicidad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        campoToxicidad.setToolTipText("LETAL, ALTA, MEDIA, BAJA o NINGUNA");
 
         javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
         jPanel17.setLayout(jPanel17Layout);
@@ -518,6 +520,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         );
 
         comboBackup.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Exportar BD", "Importar BD" }));
+        comboBackup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBackupActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -553,7 +560,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(comboBackup)
                         .addGap(1, 1, 1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -577,7 +583,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(185, 214, 214));
@@ -647,7 +653,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
         jLabel10.setText("Criterio :");
 
-        botonICriterion.setText("Ir");
+        botonICriterion.setText("X");
+        botonICriterion.setActionCommand("");
         botonICriterion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonICriterionActionPerformed(evt);
@@ -906,8 +913,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         int puntos = Integer.parseInt(spinnerPuntos.getValue().toString());
         double volumen = Double.parseDouble(campoVolumen.getText());
         int cantidad = Integer.parseInt(campoCantidad.getText());
-        String compuesto = campoCompuestos.getText();
-        String toxicidad = campoToxicidad.getText();
+        String compuesto = campoCompuestos.getText().toUpperCase();
+        String toxicidad = campoToxicidad.getText().toUpperCase();
         boolean estado = checkPromocion.isSelected();
         String lote = campoLote.getText();
         String fechaAlta = campoFechaAlta.getText();
@@ -916,7 +923,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         boolean resultadoOperacion = managerMaterial.crearMaterial(idMaterial, nombre, puntos, volumen, cantidad, compuesto, toxicidad, estado, lote, fechaAlta, idFabricante);
 
         if (resultadoOperacion) {
+            cargatablaGeneral();
+
             JOptionPane.showMessageDialog(this, "El material se ha guardado correctamente", "Material guardado", JOptionPane.INFORMATION_MESSAGE);
+
         } else {
             JOptionPane.showMessageDialog(this, "Error al guardar el material", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -935,7 +945,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         String fechaAlta = campoFechaAlta.getText();
         String idFabricante = campiIdfabricante.getText();
 
-        boolean resultadoActualizacion = managerMaterial.actualizarMaterial(idMaterial, nombre, puntos, volumen, cantidad, compuesto, toxicidad, estado, lote, fechaAlta, idFabricante);
+        if (materialCargado == null) {
+            JOptionPane.showMessageDialog(this, "Debes de cargar un material", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        boolean resultadoActualizacion = managerMaterial.actualizarMaterial(materialCargado, idMaterial, nombre, puntos, volumen, cantidad, compuesto, toxicidad, estado, lote, fechaAlta, idFabricante);
 
         if (resultadoActualizacion) {
             JOptionPane.showMessageDialog(this, "Se ha realizado la actualización con éxito", "Material actualizado", JOptionPane.INFORMATION_MESSAGE);
@@ -1025,6 +1040,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
    cargatablaGeneral();
     }//GEN-LAST:event_botonICriterionActionPerformed
 
+    private void comboBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBackupActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBackupActionPerformed
+
     public void cargatablaGeneral(){
       tabla = (JTable) jScrollPane1.getViewport().getView();
     tabla.setModel(managerMaterial.cargarTabla(Material.class));
@@ -1072,7 +1091,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public void cargaMaterial(Object id){
         materialCargado = managerMaterial.cargaMaterialVista(String.valueOf(id));
         campoIdMaterial.setText(materialCargado.getId());
-        campoNombre.setText(materialCargado.getId());
+        campoNombre.setText(materialCargado.getNombre());
         spinnerPuntos.setValue(materialCargado.getPuntos());
         campoVolumen.setText(String.valueOf(materialCargado.getVolumen()));
         campoCantidad.setText(String.valueOf(materialCargado.getCantidad()));
@@ -1195,11 +1214,13 @@ tabla.getColumnModel().getColumn(colIndex).setPreferredWidth(ancho);
     comboBackup.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          if(comboBackup.getSelectedIndex()==0){
-              respaldo.hacerRespaldo();
-          }else{
-              respaldo.restaurarRespaldoSeguro();
-          }
+            if (comboBackup.getSelectedIndex() == 0) {
+                respaldo.hacerRespaldo();
+            } else {
+                respaldo.restaurarRespaldoSeguro();
+                cargatablaGeneral();
+
+            }
         }
     });
 

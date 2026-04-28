@@ -17,7 +17,7 @@ public enum VALIDADOR {
     PUNTOS("^[1-9]\\d*$"),
     VOLUMEN("^[1-9]\\d*(\\.\\d+)?$"),
     CANTIDAD("^[1-9]\\d*$"),
-    COMPUESTOS("PLASTICO|VIDRIO|PAPEL|OTRO"),
+    COMPUESTOS("PLASTICO|VIDRIO|PAPEL|METAL|ALUMINIO|OTRO"),
     TOXICIDAD("LETAL|ALTA|MEDIA|BAJA|NINGUNA"),
     LOTE("^[0-9]{1,10}$"),
     FECHA_ALTA("^\\d{2}/\\d{2}/\\d{4}$");

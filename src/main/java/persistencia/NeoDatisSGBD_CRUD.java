@@ -1,5 +1,6 @@
 package persistencia;
 
+import modelo.Material;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
 import org.neodatis.odb.Objects;
@@ -49,17 +50,38 @@ public class NeoDatisSGBD_CRUD<T> implements SGBD_SERVICIO_CRUD<T> {
             odb.close();
         }
     }
+    
+    // LO DE LA JUSTIFICACION MAS DIRECTO IMPOSIBLE 
+    
     @Override
-    public boolean update(T obj) {
+    public boolean update(String id, T obj) {
         ODB odb = open();
+        boolean actualizado=false;
         try {
+    
+            CriteriaQuery query = new CriteriaQuery(Material.class, Where.equal("id", id));
+            Objects<T> result = odb.getObjects(query);
+
+            if (result == null || !result.hasNext()) return false;
+
+            Object objToRemove = result.next();
+            odb.delete(objToRemove);
+            
+     
+            // ALMACENA EL OBJETO NUEVO
             odb.store(obj);
-            return true;
+
+            actualizado = true;
+            odb.commit();
+
         } catch (Exception e) {
-            return false;
+            odb.rollback();
+            System.out.println("Error al actualizar el objeto: " + e.getMessage());
         } finally {
             odb.close();
         }
+
+        return actualizado;
     }
 
     @Override
