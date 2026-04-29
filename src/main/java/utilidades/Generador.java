@@ -1,11 +1,14 @@
 package utilidades;
 
-import modelo.Material;
 import modelo.anotaciones.Tabla;
 
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
+/**
+ * @author Esteban Fernandez Olid
+ * @author José Antonio Calderón Pineda
+ */
 public class Generador {
 
     /**

@@ -17,7 +17,8 @@ import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 
 /**
  *
- * @author Dell
+ * @author Esteban Fernandez Olid
+ * @author José Antonio Calderón Pineda
  * @param <T>
  */
 public interface ServicioConsultasDAO<T> {

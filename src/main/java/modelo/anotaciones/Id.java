@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * @author Esteban Fernandez Olid
- * @date 05/04/2026
+ * @author José Antonio Calderón Pineda
  */
 
 @Retention(RetentionPolicy.RUNTIME)

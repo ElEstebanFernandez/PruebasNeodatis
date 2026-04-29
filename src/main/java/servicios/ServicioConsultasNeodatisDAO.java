@@ -8,6 +8,7 @@ import java.awt.List;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
+
 import modelo.anotaciones.Tabla;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
@@ -21,8 +22,8 @@ import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 
 /**
  *
- * @author Dell
- * @param <T>
+ * @author Esteban Fernandez Olid
+ * @author José Antonio Calderón Pineda
  */
 public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> {
 
@@ -46,11 +47,10 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
             this.tabla = claseTabla.getSimpleName().toLowerCase();
         }
         File miFile = new File("ficheros_bd/");
-        System.out.println( miFile.exists() ? "existe" : "no existe");
-    
+        System.out.println(miFile.exists() ? "existe" : "no existe");
+
     }
 
-  
 
     @Override
     public T buscarPorId(String id, Class<T> tipo) {
@@ -136,14 +136,12 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
     }
 
 
-
     @Override
     public ODB abrirBD() {
 
         // ABRE EL FICHERO .ODB SEGUN EL NOMBRE DE TABLA
         return ODBFactory.open(RUTA + tabla + ".odb");
     }
-
 
 
     @Override
@@ -159,48 +157,48 @@ public class ServicioConsultasNeodatisDAO<T> implements ServicioConsultasDAO<T> 
 
     @Override
     public <T> ArrayList<T> listar(Class<T> tipo) {
-    ArrayList<T> lista = new ArrayList<>();
+        ArrayList<T> lista = new ArrayList<>();
 
-    ODB odb = abrirBD();
+        ODB odb = abrirBD();
 
-    try {
-        Objects<T> objects = odb.getObjects(tipo);
+        try {
+            Objects<T> objects = odb.getObjects(tipo);
 
-        while (objects.hasNext()) {
-            lista.add(objects.next());
+            while (objects.hasNext()) {
+                lista.add(objects.next());
+            }
+
+        } finally {
+            odb.close();
         }
 
-    } finally {
-        odb.close();
+        return lista;
     }
 
-    return lista;
+    @Override
+    public Values consultaAgregacion(ValuesCriteriaQuery query) {
+        ODB odb = abrirBD();
+        try {
+            return odb.getValues(query);
+        } finally {
+            odb.close();
+        }
     }
-
-  @Override
-public Values consultaAgregacion(ValuesCriteriaQuery query) {
-    ODB odb = abrirBD();
-    try {
-        return odb.getValues(query);
-    } finally {
-        odb.close();
-    }
-}
 
     @Override
     public Objects listarOrdenado(CriteriaQuery query) {
         ODB odb = abrirBD();
 
-    Objects resultado = null;
+        Objects resultado = null;
 
-    try {
-        resultado = odb.getObjects(query);
+        try {
+            resultado = odb.getObjects(query);
 
-    } finally {
-        odb.close();
-    }
+        } finally {
+            odb.close();
+        }
 
-    return resultado;
+        return resultado;
     }
 
 }

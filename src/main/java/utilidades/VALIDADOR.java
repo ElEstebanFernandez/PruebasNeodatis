@@ -4,7 +4,8 @@ import java.util.regex.Pattern;
 
 /**
  * Enumeracion de patrones de validacion
- * @author José Antonio Calderón
+ * @author Esteban Fernandez Olid
+ * @author José Antonio Calderón Pineda
  */
 public enum VALIDADOR {
 

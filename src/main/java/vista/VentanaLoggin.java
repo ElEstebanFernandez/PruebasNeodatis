@@ -6,7 +6,8 @@ package vista;
 
 /**
  *
- * @author Dell
+ * @author Estevan Ismael Fernandez Olid
+ * @author José Antonio Calderón Pineda
  */
 public class VentanaLoggin extends javax.swing.JFrame {
 
@@ -27,12 +28,6 @@ public class VentanaLoggin extends javax.swing.JFrame {
         
         //BOTON REGISTAR SIN FUNCION
         botonRegistrar.setEnabled(false);
-        
-        
-        
-        
-        
-        
     }
 
     /**

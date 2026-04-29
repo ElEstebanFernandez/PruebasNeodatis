@@ -3,6 +3,7 @@ package manager;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+
 import modelo.Material;
 import org.neodatis.odb.ObjectValues;
 import org.neodatis.odb.Objects;
@@ -16,10 +17,11 @@ import servicios.ServicioConsultasDAO;
 import servicios.ServicioConsultasNeodatisDAO;
 import utilidades.VALIDADOR;
 
-
-// CLASE MANAGER MATERIAL
-// GESTIONA CRUD, CONSULTAS, ORDER BY, FILTROS E ICRITERION USANDO NEODATIS
-
+/**
+ * CLASE MANAGER MATERIAL, GESTIONA CRUD, CONSULTAS, ORDER BY, FILTROS E ICRITERION USANDO NEODATIS
+ * @author Esteban Fernandez Olid
+ * @author José Antonio Calderón Pineda
+ */
 public class ManagerMaterial {
 
     private final NeoDatisSGBD_CRUD<Material> crud;
@@ -27,7 +29,7 @@ public class ManagerMaterial {
 
     private DefaultTableModel modelo;
 
-    public ManagerMaterial(){
+    public ManagerMaterial() {
         crud = new NeoDatisSGBD_CRUD<>(Material.class);
         consultas = new ServicioConsultasNeodatisDAO<>(Material.class);
 
@@ -53,10 +55,10 @@ public class ManagerMaterial {
                 !VALIDADOR.LOTE.validar(lote) ||
                 !VALIDADOR.FECHA_ALTA.validar(fechaAlta) ||
                 !VALIDADOR.ID_FABRICANTE.validar(idFabricante)
-        ) return false;
+        ) return fueCreado;
 
         Material material = new Material(idMaterial, nombre, puntos, volumen, cantidad,
-                                        compuestos, toxicidad, enPromocion, lote, fechaAlta, idFabricante);
+                compuestos, toxicidad, enPromocion, lote, fechaAlta, idFabricante);
 
         // INSERTA EN BASE DE DATOS
         fueCreado = crud.insert(material);
@@ -70,10 +72,10 @@ public class ManagerMaterial {
     }
 
     // ACTUALIZA MATERIAL EXISTENTE
-    public <T> boolean  actualizarMaterial(T materialAtiguo, String idMaterial, String nombre, int puntos, double volumen,
-                                      int cantidad, String compuestos, String toxicidad,
-                                      boolean enPromocion, String lote, String fechaAlta,
-                                      String idFabricante) {
+    public <T> boolean actualizarMaterial(T materialAtiguo, String idMaterial, String nombre, int puntos, double volumen,
+                                          int cantidad, String compuestos, String toxicidad,
+                                          boolean enPromocion, String lote, String fechaAlta,
+                                          String idFabricante) {
 
         boolean fueActualizado = false;
 
@@ -89,10 +91,10 @@ public class ManagerMaterial {
                 !VALIDADOR.LOTE.validar(lote) ||
                 !VALIDADOR.FECHA_ALTA.validar(fechaAlta) ||
                 !VALIDADOR.ID_FABRICANTE.validar(idFabricante)
-        ) return false;
+        ) return fueActualizado;
 
         Material material = new Material(idMaterial, nombre, puntos, volumen, cantidad,
-                                        compuestos, toxicidad, enPromocion, lote, fechaAlta, idFabricante);
+                compuestos, toxicidad, enPromocion, lote, fechaAlta, idFabricante);
 
         // UPDATE EN BASE DE DATOS
         fueActualizado = crud.update(material.getId(), material);
@@ -138,7 +140,7 @@ public class ManagerMaterial {
     }
 
     // BUSCA MATERIAL POR ID PARA MOSTRAR EN VISTA
-    public Material cargaMaterialVista(String id){
+    public Material cargaMaterialVista(String id) {
         return consultas.buscarPorId(id, Material.class);
     }
 
@@ -163,8 +165,8 @@ public class ManagerMaterial {
         // VERIFICA SI ES NUMERICO
         Class<?> tipo = field.getType();
         boolean esNumerico = tipo == int.class || tipo == double.class ||
-                             tipo == float.class || tipo == long.class ||
-                             Number.class.isAssignableFrom(tipo);
+                tipo == float.class || tipo == long.class ||
+                Number.class.isAssignableFrom(tipo);
 
         ValuesCriteriaQuery query = new ValuesCriteriaQuery(clase);
 
@@ -437,10 +439,10 @@ public class ManagerMaterial {
 
             if (tipo == String.class)
                 return valor;
-            
-          if (tipo == boolean.class || tipo == Boolean.class)
+
+            if (tipo == boolean.class || tipo == Boolean.class)
                 return Boolean.parseBoolean(valor);
-            
+
             return null;
 
         } catch (Exception e) {

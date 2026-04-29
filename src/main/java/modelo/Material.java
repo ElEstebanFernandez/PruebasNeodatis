@@ -7,7 +7,7 @@ import modelo.anotaciones.Tabla;
 
 /**
  * @author Esteban Fernandez Olid
- * @date 11/04/2026
+ * @author José Antonio Calderón Pineda
  */
 
 

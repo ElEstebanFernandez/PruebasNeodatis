@@ -3,7 +3,7 @@ package backup;
 
 /**
  * @author Esteban Fernandez Olid
- * @date 22/04/2026
+ * @author José Antonio Calderón Pineda
  */
 import java.io.IOException;
 import java.nio.file.*;

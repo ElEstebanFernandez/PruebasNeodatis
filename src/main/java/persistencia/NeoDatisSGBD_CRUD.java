@@ -11,7 +11,7 @@ import modelo.anotaciones.Tabla;
 
 /**
  * @author Esteban Fernandez Olid
- * @date 04/04/2026
+ * @author José Antonio Calderón Pineda
  */
 public class NeoDatisSGBD_CRUD<T> implements SGBD_SERVICIO_CRUD<T> {
 

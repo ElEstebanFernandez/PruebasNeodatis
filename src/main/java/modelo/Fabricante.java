@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author Esteban Fernandez Olid
- * @date 06/04/2026
+ * @author José Antonio Calderón Pineda
  */
 @Tabla(name = "fabricante")
 public class Fabricante extends Usuario {

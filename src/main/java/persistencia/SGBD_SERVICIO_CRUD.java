@@ -5,8 +5,7 @@ package persistencia;
 
 /**
  * @author Esteban Fernandez Olid
- * @param <T>
- * @date 04/04/2026
+ * @author José Antonio Caldeŕon Pineda
  */
 public interface SGBD_SERVICIO_CRUD<T>{
 
